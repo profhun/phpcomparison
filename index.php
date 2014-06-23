@@ -7,9 +7,13 @@
  *  Distributed under MIT license http://www.opensource.org/licenses/mit-license.php
  */
 
+    error_reporting(E_ALL);
 	session_start();
-        require "vendor/autoload.php";
+    
+    require "vendor/autoload.php";
 	
+    unset($_SESSION['working']);
+    
 	if(isset($_SESSION['working'])) {
 		header("Refresh: 30; url=index.php");
 		echo 'Benchmarking currently in progress. The results will appear here once the test has completed.' . "\n";
@@ -19,65 +23,74 @@
 	require_once "library/functions.php";
 	require_once "library/config.php";
 
-        use Rain\DB;
+    use Rain\DB;
         
-        DB::init();
+    DB::init();
 	
-	$test = get('test')=='loop'?'loop':'assign';
-	
-	$summary = DB::getAll("SELECT template_engine AS name, 
+	$summary = DB::getAll("
+	                           SELECT template_engine AS name, 
                                       avg(execution_time) AS execution_time, 
-                                      avg(memory) AS memory 
+                                      avg(memory) AS memory,
+                                      avg(memory_peak) AS memory_peak
                                FROM template_benchmark 
-                               WHERE test=:test
+                               WHERE 1
                                GROUP BY template_engine 
                                ORDER BY execution_time",
-                               array(":test"=>$test)
-                             );
+                               array()
+               );
 
-    $last_update = DB::getField("SELECT time 
+    $last_update = DB::getField("SELECT time
                                  FROM template_test_counter 
                                  LIMIT 1");
+                                 
     $last_update_date = date( "M d Y", $last_update );
     $last_update_time = date( "h:i A", $last_update );
+    
+    
+    $template_tested = DB::getAll("
+                                SELECT template_engine 
+                                FROM template_benchmark 
+                                WHERE 1
+                                GROUP BY template_engine 
+                                ORDER BY template_engine", 
+                                array(),
+                                "template_engine", 
+                                "template_engine"
+                       );
 
     
-    
-    $template_tested = DB::getAll("SELECT template_engine 
-                                   FROM template_benchmark 
-                                   WHERE test=:test 
-                                   GROUP BY template_engine 
-                                   ORDER BY template_engine", 
-                                   array(":test"=>$test),
-                                   "template_engine", 
-                                   "template_engine" );
-
-    
-	$rows = DB::getAllArray( 'SELECT template_engine, 
+	$rows = DB::getAllArray('
+	                           SELECT template_engine, 
                                     n, 
                                     avg(execution_time) AS execution_time, 
-                                    avg(memory) AS memory 
-                             FROM template_benchmark 
-                             WHERE test=:test
-                             GROUP BY template_engine, n 
-                             ORDER BY n, execution_time, template_engine',
-                             array(":test"=>$test) 
-                          );
-	$template_show = DB::getAllArray("SELECT template_engine, 
+                                    avg(memory) AS memory, 
+                                    avg(memory_peak) AS memory_peak 
+                               FROM template_benchmark 
+                               WHERE 1
+                               GROUP BY template_engine, n 
+                               ORDER BY n, execution_time, template_engine',
+                               array() 
+            );
+                          
+	$template_show = DB::getAllArray("
+	                                    SELECT template_engine, 
                                             avg(execution_time) AS execution_time 
-                                     FROM template_benchmark 
-                                     WHERE test=:test
-                                     GROUP BY template_engine 
-                                     ORDER BY n, execution_time, template_engine", 
-                                     array(':test'=>$test),
-                                     "template_engine",
-                                     "template_engine");
-	$nrows = DB::getAllArray( "SELECT n 
-                              FROM template_benchmark 
-                              WHERE test=:test
-                              GROUP BY n",
-                              array(':test'=>$test));
-?>
+                                        FROM template_benchmark 
+                                        WHERE 1
+                                        GROUP BY template_engine 
+                                        ORDER BY n, execution_time, template_engine", 
+                                        array(),
+                                        "template_engine",
+                                        "template_engine"
+                      );
+	$nrows = DB::getAllArray("
+	                           SELECT n 
+                               FROM template_benchmark 
+                               WHERE 1
+                               GROUP BY n",
+                               array()
+             );
+?><!doctype html>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -86,29 +99,25 @@
 </head>
 <body>
 
-	<div id="wrapper">
+    <div id="wrapper">
 
-		<h1>PHP Template Engine Comparison</h1>
-		<h3>Speed matters... sometimes...</h3>
-		<br/>
-
+        <h1>PHP Template Engine Comparison</h1>
+        <h3>Professional benchmark</h3>
+        <br/>
+        
         <div id="last_update">updated on <?php echo $last_update_date; ?> at <?php echo $last_update_time; ?></div>
-
-		<p>
-		A blogger asked me "Do you know any professional benchmarks for templates?" So I made this one. 
-		Now, this project is getting the attention of the international PHP developers community, which is divided
-		in two. One says PHP itself is the best template engine, the other says PHP needs template engines.
-		With these benchmark &amp; charts you can compare the performances of template engines vs PHP templates, and make your choice.
-		
-		<br/><br/><br/>
-		This benchmark is performed by executing an assignment and a loop test. Each template engine is executed <?php echo $n_test_for_template; ?> times foreach single test.
-        The test is executed on compiled template. The charts shows the average execution time and memory consumed for each test. Have fun! <br/>
-
+        
+        <p>
+            This benchmark tests:
+            <ul>
+                <li>loops</li>
+                <li>multiple level includes</li>
+                <li>if ... else ... statements</li>
+                <li>long text printings</li>
+                <li>extreme memory usage</li>
+            </ul>
+        </p>
         <br/><br/>
-        This project is open source <a href="https://github.com/rainphp/phpcomparison" target="_blank">click here to download the benchmark!</a> and <a href="https://twitter.com/feulf" target="_blank">here follow me on Twitter</a>
-
-		</p>
-		<br/><br/>
 		  <div id="selector">
 		  	<form action="index.php">
 		      <?php
@@ -120,20 +129,19 @@
 		    		echo '<label for="'.$template.'">'.$template.'</label> <input type="checkbox" name="template['.$template.']" '. ( isset($template_show[ $template ]) ? 'checked="checked"':'' ) .'> &nbsp;&nbsp; ';
 		    	}
 		    ?>
-		    &nbsp;
-		    <select name="test"><option value="assign" <?php if($test=='assign')echo 'SELECTED'; ?> >Assign</option><option value="loop" <?php if($test=='loop')echo 'SELECTED'; ?>>Loop</option></select>
 		    &nbsp; &nbsp; &nbsp;	<input type="submit" value="Click to refresh">
 		    </form>
 		  </div>
 
   		<div class="graph">
-  			<h2>Summary (<?php echo $test; ?>)</h2>
+  			<h2>Summary</h2>
 
 			<table cellpadding="0" cellspacing="1">
 				<tr>
 					<td class="table_title">Test</td>
 					<td class="table_title">tot. time</td>
 					<td class="table_title">tot. memory</td>
+					<td class="table_title">tot. memory peak</td>
 					<td class="table_title">package size</td>
 				</tr>
 		
@@ -147,6 +155,7 @@
 					<td><?php echo '<a href="'.($template_website[$res['name']]).'" target="_blank">'.$res['name'] . '</a>'; ?>  <span class="comment"><? echo $template_list_version[$res['name']]; ?></span></td>
 					<td><?php echo msec($res['execution_time']); ?></td>
 					<td><?php echo format_memory($res['memory']); ?></td>
+					<td><?php echo format_memory($res['memory_peak']); ?></td>
 					<td><?php echo getDirectorySize($res['name']); ?></td>
 				</tr>
 			
@@ -157,33 +166,38 @@
   		</div>
 
 		<div class="graph">
-			<h2>Execution Time (<?php echo $test; ?>)</h2>
+			<h2>Execution Time</h2>
 			<div class="graph_inner">
 				<iframe id="graph2" src="graph/line.php?<?php echo $sel; ?>test=<?php echo $test; ?>" width="100%" height="350" style="border:0px;"></iframe>
 			</div>
-			<h2>Memory (<?php echo $test; ?>)</h2>
+			<h2>Memory</h2>
 			<div class="graph_inner">
-				<iframe id="graph3" src="graph/line.php?<?php echo $sel; ?>type=memory&test=<?php echo $test; ?>" width="100%" height="350" style="border:0px;"></iframe>
+				<iframe id="graph3" src="graph/line.php?<?php echo $sel; ?>type=memory" width="100%" height="350" style="border:0px;"></iframe>
 			</div>
+			<h2>Memory Peak</h2>
+            <div class="graph_inner">
+                <iframe id="graph3" src="graph/line.php?<?php echo $sel; ?>type=memory_peak" width="100%" height="350" style="border:0px;"></iframe>
+            </div>
 
 		</div>
 		
 		<div class="graph">
-			<h2>Total average (<?php echo $test; ?>)</h2>
+			<h2>Total average</h2>
 			<div class="graph_inner">
-				<div style="float:left;"><iframe src="graph/pie.php?<?php echo $sel; ?>test=<?php echo $test; ?>" width="440" height="380" style="border:0px;"></iframe></div>
-				<div style="float:right;"><iframe src="graph/pie.php?<?php echo $sel; ?>test=<?php echo $test; ?>&type=memory" width="440" height="380" style="border:0px;"></iframe></div>
+				<div style="float:left;"><iframe src="graph/pie.php?<?php echo $sel; ?>" width="440" height="380" style="border:0px;"></iframe></div>
+				<div style="float:right;"><iframe src="graph/pie.php?<?php echo $sel; ?>&type=memory" width="440" height="380" style="border:0px;"></iframe></div>
 			</div>
 		</div>
   
+        <div id="copyright">
+            changed by <a href="https:////github.com/profhun">PROFHUN</a>. original repo: <a href="https://github.com/rainphp/phpcomparison/">rainphp/phpcomparison</a>
+        </div>
+  
 	</div>
 	
-	<div id="copyright">
-		<a href="http://www.federicoulfo.it">Federico Ulfo</a>
-	</div>
+	
 
         
 	
 </body>
 </html>
-

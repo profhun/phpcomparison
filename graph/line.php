@@ -10,35 +10,37 @@
 	$type = get('type')=='memory'?'memory':'execution_time';
 	$template_tested = DB::getAllArray("SELECT template_engine 
                                        FROM template_benchmark 
-                                       WHERE test=:test
+                                       WHERE 1
                                        GROUP BY template_engine 
                                        ORDER BY template_engine", 
-                                       array(':test'=>$test),
+                                       array(),
                                        "template_engine", 
                                        "template_engine" );
 
 	$rows = DB::getAllArray( "SELECT template_engine, 
                                          n, 
                                          avg(execution_time) AS execution_time, 
-                                         round(avg(memory)/1024) AS memory 
+                                         round(avg(memory)/1024) AS memory,
+                                         round(avg(memory_peak)/1024) AS memory_peak
                                   FROM template_benchmark 
-                                  WHERE test=:test
+                                  WHERE 1
                                   GROUP BY template_engine, n 
                                   ORDER BY n, template_engine",
-                                  array(':test'=>$test));
+                                  array());
+                                  
 	$template_show = DB::getAllArray( "SELECT template_engine, 
                                              avg(execution_time) AS execution_time 
                                            FROM template_benchmark 
-                                           WHERE test=:test
+                                           WHERE 1
                                            GROUP BY template_engine 
                                            ORDER BY n, template_engine", 
-                                           array(":test"=>$test),
+                                           array(),
                                            "template_engine", "template_engine" );
 	$nrows = DB::getAllArray("SELECT n 
                                   FROM template_benchmark 
-                                  WHERE test=:test
+                                  WHERE 1
                                   GROUP BY n",
-                                  array(':test'=>$test)
+                                  array()
                                  );
 
 	$color = array('#3366cc','#dc3912','#ff9900','#109618','#990099','#0099c6','#dd4477' );

@@ -54,8 +54,9 @@
 			`n` int(11) NOT NULL,
 			`execution_time` int(11) NOT NULL,
 			`memory` int(11) NOT NULL,
+			`memory_peak` int(11) NOT NULL,
 			PRIMARY KEY (`id`)
-		) ENGINE=MyISAM  DEFAULT CHARSET=latin1;");
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
 		//counter table
 		$db->query("CREATE TABLE IF NOT EXISTS `template_test_counter` (
 			`test` varchar(30) NOT NULL,
@@ -64,7 +65,7 @@
 			`execution_number` int(11) NOT NULL,
 			`time` int(11) NOT NULL,
 			PRIMARY KEY (`test`,`template_number`,`test_number`,`execution_number`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 		//clean up
 		$db->query("TRUNCATE TABLE template_benchmark");
 		$db->query("TRUNCATE TABLE template_test_counter");

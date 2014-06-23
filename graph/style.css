@@ -29,5 +29,5 @@ form{margin:0px;}
 #last_update{position:absolute;top:10px;left:10px;color:#999;font-size:11px}
 #social{font-size:11px;color:#999;float:left;margin-bottom:10px;}
 #social div{margin:5px;float: left;}
-#copyright{font-size:11px;color:#999;float:right;}
-#copyright a{font-size:11px;color:#999;float:right;}
+#copyright{font-size:11px;color:#999; text-align: right; }
+#copyright a{font-size:11px;color:#999; }

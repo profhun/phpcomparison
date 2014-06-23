@@ -12,18 +12,18 @@
                                             avg(execution_time) AS execution_time, 
                                             avg(memory) AS memory 
                                      FROM template_benchmark 
-                                     WHERE test=:test
+                                     WHERE 1
                                      GROUP BY template_engine 
                                      ORDER BY template_engine",
-                                     array(':test'=>$test)
+                                     array()
                                    );
 
 	$template_tested = DB::getAllArray("SELECT template_engine 
                                             FROM template_benchmark 
-                                            WHERE test=:test
+                                            WHERE 1
                                             GROUP BY template_engine 
                                             ORDER BY template_engine", 
-                                            array(':test'=>$test),
+                                            array(),
                                             "template_engine", "template_engine" );
 
 	$rows = DB::getAllArray("SELECT template_engine, 
@@ -31,23 +31,23 @@
                                         avg(execution_time) AS execution_time, 
                                         avg(memory) AS memory 
                                  FROM template_benchmark 
-                                 WHERE test=:test
+                                 WHERE 1
                                  GROUP BY template_engine, n 
                                  ORDER BY n, template_engine",
-                                 array(':test'=>$test));
+                                 array());
 	$template_show = DB::getAllArray("SELECT template_engine, 
                                                  avg(execution_time) AS execution_time 
                                           FROM template_benchmark 
-                                          WHERE test=:test
+                                          WHERE 1
                                           GROUP BY template_engine 
                                           ORDER BY n, template_engine", 
-                                          array(':test'=>$test),
+                                          array(),
                                           "template_engine", "template_engine");
 	$nrows = DB::getAllArray("SELECT n 
                                   FROM template_benchmark 
-                                  WHERE test=:test
+                                  WHERE 1
                                   GROUP BY n",
-                                 array(':test'=>$test));
+                                 array());
 
 	$color = array('#3366cc','#dc3912','#ff9900','#109618','#990099','#0099c6','#dd4477' );
 	$color_sel = "colors:[";
@@ -103,7 +103,7 @@
 				function drawChart() {
 					// Create and populate the data table.
 					var data = new google.visualization.DataTable();
-					data.addColumn('string', '<?php echo $type=='memory'?'Memory (KB)':'Execution Time (µs)'; ?>' );
+					data.addColumn('string', '<?php echo $type=='memory'?'Memory (KB)':'Execution Time (ï¿½s)'; ?>' );
 
 					<?php echo $html; ?>
 
