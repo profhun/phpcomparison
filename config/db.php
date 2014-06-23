@@ -5,9 +5,9 @@ $db = array(
     'dev' => array(
         'driver' => 'mysql',
         'hostname' => 'localhost',
-        'username' => 'root',
-        'password' => 'root',
-        'database' => 'benchmark'
+        'username' => 'tpl_test',
+        'password' => 'tpl_test',
+        'database' => 'tpl_test'
     ),
     //production database (live website)
     'prod' => array(
