@@ -18,11 +18,11 @@ forked from rainphp/phpcomparison
 ##Release notes:
 - Fixed bugs in original code
 - remove test types
-todo: create complex tests
-todo: implement blade
-todo: implement template lite 2
-todo: implement phppe2
-todo: implement phppe3
-todo: improve benchmark numbers
+- todo: create complex tests
+- todo: implement blade
+- todo: implement template lite 2
+- todo: implement phppe2
+- todo: implement phppe3
+- todo: improve benchmark numbers
 
 
