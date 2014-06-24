@@ -7,6 +7,7 @@
  *  Distributed under MIT license http://www.opensource.org/licenses/mit-license.php
  */
 
+ 
     error_reporting(E_ALL);
 	session_start();
     
@@ -22,6 +23,9 @@
 
 	require_once "library/functions.php";
 	require_once "library/config.php";
+
+    //$data = create_test_data_structure(10);
+    //var_dump($data);
 
     use Rain\DB;
         

@@ -24,13 +24,28 @@ $db->init();
 //install / reset?
 if(isset($_GET['reset']) || !isset($_SESSION['working'])) {
 	db_install($db);
+    
+    if(!is_dir("test_generated_outputs/")){
+        mkdir("test_generated_outputs/",0777);
+    }
+    chown("test_generated_outputs/",0777);
+    
+    //clean out test_generated_outputs folder
+    $files = glob("test_generated_outputs/*.*");
+    foreach($files as $file){
+        unlink($file);
+    }
+    
     $_SESSION['n_index'] = 0;
+    
+    //generate test data
+    create_test_data_structure($n_values[$_SESSION['n_index']],'apc');
 }
 
 //no more installs!
 $_SESSION['working'] = 1;
 
-$n_test_for_template = $n_values[$_SESSION['n_index']];
+//$n_test_for_template = $n_values[$_SESSION['n_index']];
 
 $vars = $db->getRow("SELECT * FROM template_test_counter");
 
@@ -38,13 +53,15 @@ $template_number    = $vars['template_number'];
 $test_number        = $vars['test_number'];
 $execution_number   = $vars['execution_number'];
 
+//data
 $myvar              = array();
 $n                  = $n_values[$test_number];
 $template_engine    = $template_list[$template_number];
 $engine_path        = 'template_engine/' . $template_engine;
-	
+
+/*
 for($i = 0; $i < $n; $i++) {
-	/*if($test == 'loop') {
+	if($test == 'loop') {
 		$myvar[] = array(
 			'id' => $i,
 			'name' => "<b>longname$i</b>",
@@ -52,21 +69,29 @@ for($i = 0; $i < $n; $i++) {
 			'param2' => 'eiho',
 			'param3' => '<h1>hello world</h1>'
 		);
-	} else {*/
+	} else {
 		$myvar["var$i"] = '<b>blah!</b>';
 	//}
 }	
+*/
+
+$template_data = load_data_structure();
 
 // start benchmark	
 $start          = microtime(true);
 $memstart       = memory_get_usage();
 $memstart_peak  = memory_get_peak_usage();
 
-require_once 'template_engine/' . $template_engine . "/assign.php"; 
+require_once 'template_engine/' . $template_engine . "/assign.php";
 	
 $mem            = memory_get_usage() - $memstart;
 $mem_peak       = memory_get_peak_usage() - $memstart_peak;
 $exc            = round((microtime(true) - $start) * 1000000);
+
+//save output to test_generated_outputs directory
+$filename = "test_generated_outputs/{$template_engine}_{$n_values[$_SESSION['n_index']]}_{$execution_number}.html";
+touch($filename);
+file_put_contents($filename, $html);
 
 // stop benchmark
 $html = '<h1>Template speed test</h1>
@@ -94,11 +119,16 @@ if($execution_number >= $n_test_for_template) {
 	if($template_number >= count($template_list)) {
 		$template_number = 0;
 		$test_number++;
-		if($test_number >= count($n_values)) {
-			
+		
+        //generate test data
+        $_SESSION['n_index']++;
+        create_test_data_structure($n_values[$_SESSION['n_index']],'apc');
+        
+		if($test_number >= count($n_values)) {    
+            
 				$template_number = $test_number = $execution_number = 0;
 				$db->query("UPDATE template_test_counter 
-                                           SET test=:test, 
+                                           SET  
                                                template_number=:template_number, 
                                                test_number=:test_number,
                                                execution_number=:execution_number",
@@ -107,9 +137,19 @@ if($execution_number >= $n_test_for_template) {
                                                ':test_number'=>$test_number,
                                                ':execution_number'=>$execution_number,)
                                         );
-                                        
-                $_SESSION['n_index']++;
-				header("Refresh: 0.1; url=index.php");
+                
+                
+                
+                //if(){
+                    if($_SESSION['n_index'] >= (count($n_values)-1)){
+                        header("Refresh: 0.1; url=index.php");
+                        exit;
+                    }
+                //}
+                
+                
+                             
+				//header("Refresh: 0.1; url=test.php");
 				exit;
 			/*
 				header("Refresh: 0.1; url=save.php");
@@ -129,6 +169,8 @@ if($execution_number >= $n_test_for_template) {
 			*/
 		}
 	}
+    
+
 }
 
 $db->query("UPDATE template_test_counter 
@@ -138,10 +180,10 @@ $db->query("UPDATE template_test_counter
                execution_number = :execution_number, 
                time=UNIX_TIMESTAMP()",
           array(
-               'template_number'    => $template_number,
-               'test_number'        => $test_number,
-               'execution_number'   => $execution_number)
+               ':template_number'    => $template_number,
+               ':test_number'        => $test_number,
+               ':execution_number'   => $execution_number)
         );
 
-header("Refresh: 0.1; url=test.php");
+//header("Refresh: 0.1; url=test.php");
 echo $html;

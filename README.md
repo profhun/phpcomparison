@@ -18,7 +18,9 @@ forked from rainphp/phpcomparison
 ##Release notes:
 - Fixed bugs in original code
 - remove test types
-- todo: create complex tests
+- complex test with loop, include, if/else
+- save test outout data for debug
+- todo: implement smarty
 - todo: implement blade
 - todo: implement template lite 2
 - todo: implement phppe2
