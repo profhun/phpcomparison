@@ -17,4 +17,4 @@ $template_data = create_test_data_structure($n,'apc');
 require_once 'template_engine/' . $template_engine . "/assign.php";
 
 //display
-echo $html;
+echo apc_fetch('html_output');

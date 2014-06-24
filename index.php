@@ -39,8 +39,7 @@
                                FROM template_benchmark 
                                WHERE 1
                                GROUP BY template_engine 
-                               ORDER BY execution_time",
-                               array()
+                               ORDER BY execution_time"
                );
 
     $last_update = DB::getField("SELECT time
@@ -57,7 +56,7 @@
                                 WHERE 1
                                 GROUP BY template_engine 
                                 ORDER BY template_engine", 
-                                array(),
+                                null,
                                 "template_engine", 
                                 "template_engine"
                        );
@@ -72,8 +71,7 @@
                                FROM template_benchmark 
                                WHERE 1
                                GROUP BY template_engine, n 
-                               ORDER BY n, execution_time, template_engine',
-                               array() 
+                               ORDER BY n, execution_time, template_engine'
             );
                           
 	$template_show = DB::getAllArray("
@@ -83,7 +81,7 @@
                                         WHERE 1
                                         GROUP BY template_engine 
                                         ORDER BY n, execution_time, template_engine", 
-                                        array(),
+                                        null,
                                         "template_engine",
                                         "template_engine"
                       );
@@ -91,8 +89,7 @@
 	                           SELECT n 
                                FROM template_benchmark 
                                WHERE 1
-                               GROUP BY n",
-                               array()
+                               GROUP BY n"
              );
 ?><!doctype html>
 <html>

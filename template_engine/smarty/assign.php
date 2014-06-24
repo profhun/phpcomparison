@@ -15,6 +15,6 @@ if (!is_writable($GLOBALS['engine_path'] . '/cache')) {
 	exit;
 }
 $tpl->setCacheDir($GLOBALS['engine_path'] . '/cache');
-$tpl->assign($GLOBALS['myvar']);
+$tpl->assign('template_data',$template_data);
 
-$html = $tpl->fetch('template_assign.html');
+apc_store('html_output',$tpl->fetch('template_assign.html'));

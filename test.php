@@ -28,7 +28,6 @@ if(isset($_GET['reset']) || !isset($_SESSION['working'])) {
     if(!is_dir("test_generated_outputs/")){
         mkdir("test_generated_outputs/",0777);
     }
-    chown("test_generated_outputs/",0777);
     
     //clean out test_generated_outputs folder
     $files = glob("test_generated_outputs/*.*");
@@ -87,6 +86,9 @@ require_once 'template_engine/' . $template_engine . "/assign.php";
 $mem            = memory_get_usage() - $memstart;
 $mem_peak       = memory_get_peak_usage() - $memstart_peak;
 $exc            = round((microtime(true) - $start) * 1000000);
+
+//save html output
+$html = apc_fetch('html_output');
 
 //save output to test_generated_outputs directory
 $filename = "test_generated_outputs/{$template_engine}_{$n_values[$_SESSION['n_index']]}_{$execution_number}.html";
@@ -185,5 +187,5 @@ $db->query("UPDATE template_test_counter
                ':execution_number'   => $execution_number)
         );
 
-//header("Refresh: 0.1; url=test.php");
+header("Refresh: 0.1; url=test.php");
 echo $html;

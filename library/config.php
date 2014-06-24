@@ -15,44 +15,44 @@ $n_values = array( 1, 500, 5000 );
 // get the list of the templates
 $template_list = array(
     'php',
-	//'blade',
+	'blade',
 	//'phppe2',
 	//'phppe3',
 	//'dwoo',
-	//'smarty',
+	'smarty',
 	//'twig12',
 	//'template_lite2',
 );
 
 $template_list_version = array(
 	'php'            => phpversion(),
-	//'blade'          => '',
+	'blade'          => 'latest',
 	//'phppe2'         => '',
     //'phppe3'         => '',
 	//'dwoo'             => '1.1.1',
-	//'smarty'           => '3.1.11',
+	'smarty'           => '3.1.18',
 	//'twig12'           => '1.12.2',
 	//'template_lite2'   => '',
 );
 
 $template_list_package_size = array(
-	'php'            => '4 KB',
-	//'blade'          => '',
+	'php'            => '1.3 KB',
+	'blade'          => '421 KB',
 	//'phppe2'         => '',
     //'phppe3'         => '',
 	//'dwoo'             => '848 KB',
-	//'smarty'           => '1100 KB',
+	'smarty'           => '1100 KB',
 	//'twig12'           => '2000 KB',
 	//'template_lite2'   => '',
 );
 
 $template_website = array(
-	'php'            => 'http://php.net',
-	//'blade'          => '',
+	'php'              => 'http://php.net',
+	'blade'            => 'https://github.com/PhiloNL/Laravel-Blade',
 	//'phppe2'         => '',
     //'phppe3'         => '',
 	//'dwoo'             => 'http://dwoo.org',
-	//'smarty'           => 'http://www.smarty.net/',
+	'smarty'           => 'http://www.smarty.net/',
 	//'twig12'           => 'http://twig-project.org',
 	//'template_lite2'   => '',
 );
