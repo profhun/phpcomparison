@@ -21,8 +21,9 @@ forked from rainphp/phpcomparison
 - save test output data for debug
 - implement Smarty
 - implement Laravel Blade
+- implement phppe2 (for fun)
+- implement twig1.15.1
 - todo: implement template lite 2
-- todo: implement phppe2
 - todo: implement phppe3
 
 
