@@ -6,11 +6,14 @@
         DB::configure('config_dir', dirname(__DIR__) .'/config/');
         DB::init();
 
-	$test = get('test')=='loop'?'loop':'assign';
-	$type = get('type')=='memory'?'memory':'execution_time';
+	$type = 'execution_time';
+    if(get('type')){
+        $type = get('type');
+    }
 	$summary = DB::getAllArray( "SELECT template_engine AS name, 
                                             avg(execution_time) AS execution_time, 
-                                            avg(memory) AS memory 
+                                            avg(memory) AS memory, 
+                                            avg(memory_peak) AS memory_peak 
                                      FROM template_benchmark 
                                      WHERE 1
                                      GROUP BY template_engine 
@@ -29,7 +32,8 @@
 	$rows = DB::getAllArray("SELECT template_engine, 
                                         n, 
                                         avg(execution_time) AS execution_time, 
-                                        avg(memory) AS memory 
+                                        avg(memory) AS memory, 
+                                        avg(memory_peak) AS memory_peak 
                                  FROM template_benchmark 
                                  WHERE 1
                                  GROUP BY template_engine, n 

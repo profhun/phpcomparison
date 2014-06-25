@@ -1,2 +1,3 @@
 .DS_Store
 library/config.db.local.php
+test_generated_outputs/

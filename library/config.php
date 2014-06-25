@@ -7,15 +7,16 @@
 global $template_list_package_size, $template_website;
 
 // number of execution test for each template
-$n_test_for_template = 3;
+$n_test_for_template = 10;
 
 // number of variables assigned in each test
-$n_values = array( 1, 500, 5000 );
+$n_values = array( 6000, 2000 ,200, 20 );
 
 // get the list of the templates
 $template_list = array(
-    'php',
 	'blade',
+    'php',
+	'h2o',
 	//'phppe2',
 	//'phppe3',
 	//'dwoo',
@@ -27,6 +28,7 @@ $template_list = array(
 $template_list_version = array(
 	'php'            => phpversion(),
 	'blade'          => 'latest',
+	'h2o'            => 'latest',
 	//'phppe2'         => '',
     //'phppe3'         => '',
 	//'dwoo'             => '1.1.1',
@@ -38,6 +40,7 @@ $template_list_version = array(
 $template_list_package_size = array(
 	'php'            => '1.3 KB',
 	'blade'          => '421 KB',
+	'h2o'            => '',
 	//'phppe2'         => '',
     //'phppe3'         => '',
 	//'dwoo'             => '848 KB',
@@ -49,6 +52,7 @@ $template_list_package_size = array(
 $template_website = array(
 	'php'              => 'http://php.net',
 	'blade'            => 'https://github.com/PhiloNL/Laravel-Blade',
+	'h2o'              => '',
 	//'phppe2'         => '',
     //'phppe3'         => '',
 	//'dwoo'             => 'http://dwoo.org',

@@ -167,15 +167,15 @@
   		</div>
 
 		<div class="graph">
-			<h2>Execution Time</h2>
+			<h2>Execution Time / Assigned variables</h2>
 			<div class="graph_inner">
-				<iframe id="graph2" src="graph/line.php?<?php echo $sel; ?>test=<?php echo $test; ?>" width="100%" height="350" style="border:0px;"></iframe>
+				<iframe id="graph2" src="graph/line.php?<?php echo $sel; ?>type=" width="100%" height="350" style="border:0px;"></iframe>
 			</div>
-			<h2>Memory</h2>
+			<h2>Memory / Assigned variables</h2>
 			<div class="graph_inner">
 				<iframe id="graph3" src="graph/line.php?<?php echo $sel; ?>type=memory" width="100%" height="350" style="border:0px;"></iframe>
 			</div>
-			<h2>Memory Peak</h2>
+			<h2>Memory Peak / Assigned variables</h2>
             <div class="graph_inner">
                 <iframe id="graph3" src="graph/line.php?<?php echo $sel; ?>type=memory_peak" width="100%" height="350" style="border:0px;"></iframe>
             </div>
@@ -186,7 +186,7 @@
 			<h2>Total average</h2>
 			<div class="graph_inner">
 				<div style="float:left;"><iframe src="graph/pie.php?<?php echo $sel; ?>" width="440" height="380" style="border:0px;"></iframe></div>
-				<div style="float:right;"><iframe src="graph/pie.php?<?php echo $sel; ?>&type=memory" width="440" height="380" style="border:0px;"></iframe></div>
+				<div style="float:right;"><iframe src="graph/pie.php?<?php echo $sel; ?>&type=memory_peak" width="440" height="380" style="border:0px;"></iframe></div>
 			</div>
 		</div>
   

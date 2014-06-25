@@ -1,5 +1,5 @@
-#PHP Template Engine Comparison
-##Benchmark current template engines
+#PHP Template Engine Benchmark and Comparsion
+##Benchmark today template engines
 
 This benchmark tests the speed and memory consumption of PHP template engines. You can fork the project and contribute by adding your favorite template engine.
 
@@ -18,7 +18,7 @@ forked from rainphp/phpcomparison
 - remove test types
 - complex test with loop, include, if/else
 - improve benchmark numbers
-- save test outout data for debug
+- save test output data for debug
 - implement Smarty
 - implement Laravel Blade
 - todo: implement template lite 2

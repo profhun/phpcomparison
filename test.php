@@ -7,6 +7,9 @@
  *  Distributed under MIT license http://www.opensource.org/licenses/mit-license.php
  */
 
+ignore_user_abort(true);
+set_time_limit(0);
+ 
 error_reporting(E_ALL ^ E_NOTICE);
 
 session_start();
@@ -99,7 +102,7 @@ file_put_contents($filename, $html);
 $html = '<h1>Template speed test</h1>
 		template: <b>'.$template_engine.'</b><br/>
 		test cycle: <b>'.($execution_number+1).'/'.$n_test_for_template.'</b><br/>
-		n variables: <b>'.$n.'</b><br/>
+		n variables: <b>'.$n.' / '.count($template_data).'</b><br/>
 		execution time: <b>'.$exc.'</b><br/>
 		memory used: <b>'.$mem.'</b><br/>
 		memory used peak: <b>'.$mem_peak.'</b><br/>

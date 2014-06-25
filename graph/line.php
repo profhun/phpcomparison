@@ -6,8 +6,12 @@
         DB::configure('config_dir', dirname(__DIR__) .'/config/');
         DB::init();
 
-	$test = get('test')=='loop'?'loop':'assign';
-	$type = get('type')=='memory'?'memory':'execution_time';
+    
+    $type = 'execution_time';
+    if(get('type')){
+        $type = get('type');
+    }
+	
 	$template_tested = DB::getAllArray("SELECT template_engine 
                                        FROM template_benchmark 
                                        WHERE 1
@@ -19,9 +23,9 @@
 
 	$rows = DB::getAllArray( "SELECT template_engine, 
                                          n, 
-                                         avg(execution_time) AS execution_time, 
-                                         round(avg(memory)/1024) AS memory,
-                                         round(avg(memory_peak)/1024) AS memory_peak
+                                         avg((execution_time/n)) AS execution_time, 
+                                         round(avg(memory)/1024/n) AS memory,
+                                         round(avg(memory_peak)/1024/n) AS memory_peak
                                   FROM template_benchmark 
                                   WHERE 1
                                   GROUP BY template_engine, n 
@@ -29,7 +33,7 @@
                                   array());
                                   
 	$template_show = DB::getAllArray( "SELECT template_engine, 
-                                             avg(execution_time) AS execution_time 
+                                             avg((execution_time/n)) AS execution_time 
                                            FROM template_benchmark 
                                            WHERE 1
                                            GROUP BY template_engine 
@@ -69,8 +73,9 @@
   	$html = "data.addRows(".(count($nrows)).");\n";
 
 	// add column
-	foreach( $template_show as $tpl )
+	foreach( $template_show as $tpl ){
   		$html .= "data.addColumn('number', '$tpl');\n";
+	}
   	
   	$row=0;
   	foreach( $tpl_array as $num => $array ){
@@ -103,21 +108,14 @@
 		</head>
 	<body>
 		<?php
-			if( $type == 'memory' )
+			if( in_array($type,array('memory','memory_peak')))
 				echo "Memory (KB)";
 			else
 				echo "Execution Time (&mu;s)"
 		?>
 		<div id="line_chart"></div>
 		
-		<div style="margin-left:600px;">
-		<?php
-			if( $test == 'assign' )
-				echo "Assigned variables";
-			else
-				echo "Array elements"
-		?>
-		</div>
+		<div style="margin-left:600px;"><?php echo "Assigned variables"; ?></div>
 
 	</body>
 </html>
