@@ -23,6 +23,7 @@ forked from rainphp/phpcomparison
 - implement Laravel Blade
 - implement phppe2 (for fun)
 - implement twig1.15.1
+- implement dwoo2
 - todo: implement template lite 2
 - todo: implement phppe3
 

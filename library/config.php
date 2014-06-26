@@ -1,7 +1,7 @@
 <?php
 
 #------------------------------------
-#   Configuration 
+#   Configuration
 #------------------------------------
 
 global $template_list_package_size, $template_website;
@@ -21,6 +21,7 @@ $template_list = array(
 	//'phppe3',
 	'smarty',
 	'twig1-15-1',
+	'dwoo2',
 	//'twig12',
 	//'template_lite2',
 );
@@ -33,6 +34,7 @@ $template_list_version = array(
     //'phppe3'         => '',
 	'smarty'           => '3.1.18',
 	'twig1-15-1'       => '1.15.1',
+	'dwoo2'            => '2 beta',
 	//'twig12'           => '1.12.2',
 	//'template_lite2'   => '',
 );
@@ -45,6 +47,7 @@ $template_list_package_size = array(
     //'phppe3'         => '',
 	'smarty'           => '1100 KB',
 	'twig1-15-1'       => '405 KB',
+	'dwoo2'            => '450 KB',
 	//'twig12'           => '2000 KB',
 	//'template_lite2'   => '',
 );
@@ -57,6 +60,7 @@ $template_website = array(
     //'phppe3'         => '',
 	'smarty'           => 'http://www.smarty.net/',
 	'twig1-15-1'       => 'http://twig.sensiolabs.org/',
+	'dwoo2'            => 'https://github.com/emulienfou/dwoo/',
 	//'twig12'           => 'http://twig-project.org',
 	//'template_lite2'   => '',
 );
